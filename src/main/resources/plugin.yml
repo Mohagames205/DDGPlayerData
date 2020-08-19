@@ -1,0 +1,4 @@
+name: Playerdata
+version: ${project.version}
+main: me.mohamedelyousfi.playerdata.Playerdata
+website: mohamedelyousfi.me

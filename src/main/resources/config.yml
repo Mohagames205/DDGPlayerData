@@ -1,0 +1,8 @@
+use-mysql: true
+
+mysql:
+  host: localhost:3306
+  username: username
+  password: wordpass321
+  database: haha
+
