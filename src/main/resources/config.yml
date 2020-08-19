@@ -1,8 +1,10 @@
+# Wanner dit true is dan wordt MySQL gebruikt als dataprovider, anders wordt YML gebruikt.
 use-mysql: true
 
+# De MySQL authenticatiegegevens
 mysql:
   host: localhost:3306
-  username: username
+  username: root
   password: wordpass321
-  database: haha
+  database: database
 
