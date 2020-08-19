@@ -1,8 +1,6 @@
 package me.mohamedelyousfi.playerdata.util;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import me.mohamedelyousfi.playerdata.Playerdata;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -26,9 +24,7 @@ public class PlayerdataWrapper {
     private long onlineTime;
 
 
-
-    public PlayerdataWrapper(Player player, String uuid, boolean isFlying, Location lastLocation, int gameMode, long onlineTime)
-    {
+    public PlayerdataWrapper(Player player, String uuid, boolean isFlying, Location lastLocation, int gameMode, long onlineTime) {
         this.player = player;
         this.uuid = uuid;
         this.isFlying = isFlying;
@@ -37,38 +33,41 @@ public class PlayerdataWrapper {
         this.onlineTime = onlineTime;
     }
 
-    public String getUniqueId()
-    {
+    public String getUniqueId() {
         return uuid;
     }
 
-    public Player getPlayer()
-    {
+    public Player getPlayer() {
         return player;
     }
 
-    public boolean isFlying()
-    {
+    public boolean isFlying() {
         return isFlying;
     }
 
-    public Location getLastLocation()
-    {
+    public Location getLastLocation() {
         return lastLocation;
     }
 
-    public int getGameMode()
-    {
+    public int getGameMode() {
         return gameMode;
     }
 
-    public long getOnlineTime()
-    {
+    public long getOnlineTime() {
         return onlineTime;
     }
 
+    /**
+     * Deze functie maakt van een ResultSet uit de playerdata table een PlayerdataWrapper object.
+     *
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     public static PlayerdataWrapper fromResultset(ResultSet resultSet) throws SQLException {
         String uuid = resultSet.getString("player_uuid");
+        Player possiblePlayer = Playerdata.getInstance().getServer().getPlayer(UUID.fromString(uuid));
+
         boolean isFlying = resultSet.getBoolean("is_flying");
 
         double posX = resultSet.getDouble("location_x");
@@ -82,7 +81,7 @@ public class PlayerdataWrapper {
         int gamemode = resultSet.getInt("gamemode");
         int onlineTime = resultSet.getInt("total_playtime");
 
-        return new PlayerdataWrapper(null, uuid, isFlying, location, gamemode, onlineTime);
+        return new PlayerdataWrapper(possiblePlayer, uuid, isFlying, location, gamemode, onlineTime);
     }
 
 }

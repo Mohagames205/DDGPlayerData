@@ -11,11 +11,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 
+/**
+ * Wanneer een van de onderstaande acties wordt getriggered wordt alle data in de database/ymlfile geupdate
+ */
 public class EventListener implements Listener {
 
     @EventHandler
-    public void onGamemodeChange(PlayerGameModeChangeEvent event)
-    {
+    public void onGamemodeChange(PlayerGameModeChangeEvent event) {
         Player player = event.getPlayer();
         PlayerdataWrapper playerdataWrapper = new PlayerdataWrapper(player, player.getUniqueId().toString(), player.isFlying(), player.getLocation(), event.getNewGameMode().getValue(), player.getPlayerTime());
         DataProvider dataProvider = Playerdata.getInstance().getDataProvider();
@@ -23,8 +25,7 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onFlyToggle(PlayerToggleFlightEvent event)
-    {
+    public void onFlyToggle(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
         PlayerdataWrapper playerdataWrapper = new PlayerdataWrapper(player, player.getUniqueId().toString(), event.isFlying(), player.getLocation(), player.getGameMode().getValue(), player.getPlayerTime());
         DataProvider dataProvider = Playerdata.getInstance().getDataProvider();
@@ -32,8 +33,7 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event)
-    {
+    public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         PlayerdataWrapper playerdataWrapper = new PlayerdataWrapper(player, player.getUniqueId().toString(), player.isFlying(), player.getLocation(), player.getGameMode().getValue(), player.getPlayerTime());
         DataProvider dataProvider = Playerdata.getInstance().getDataProvider();
@@ -41,14 +41,11 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event)
-    {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-
         PlayerdataWrapper playerdataWrapper = new PlayerdataWrapper(player, player.getUniqueId().toString(), player.isFlying(), player.getLocation(), player.getGameMode().getValue(), player.getPlayerTime());
-
         DataProvider dataProvider = Playerdata.getInstance().getDataProvider();
-        dataProvider.initData(playerdataWrapper);
+        dataProvider.save(playerdataWrapper);
     }
 
 
