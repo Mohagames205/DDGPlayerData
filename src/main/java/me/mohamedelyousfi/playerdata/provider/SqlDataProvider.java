@@ -22,8 +22,8 @@ public class SqlDataProvider implements DataProvider {
     public SqlDataProvider() throws SQLException {
         Connection connection = DataSource.getConnection();
         plugin = Playerdata.getInstance();
-        Statement stmt = connection.createStatement();
-        stmt.execute("CREATE TABLE IF NOT EXISTS playerdata(player_uuid VARCHAR(36), is_flying BOOLEAN, location_x DOUBLE, location_y DOUBLE, location_z DOUBLE, world VARCHAR(255), gamemode int, total_playtime int, primary key (player_uuid))");
+        Statement statement = connection.createStatement();
+        statement.execute("CREATE TABLE IF NOT EXISTS playerdata(player_uuid VARCHAR(36), is_flying BOOLEAN, location_x DOUBLE, location_y DOUBLE, location_z DOUBLE, world VARCHAR(255), gamemode int, total_playtime int, primary key (player_uuid))");
     }
 
     /**
@@ -41,21 +41,22 @@ public class SqlDataProvider implements DataProvider {
                     // De data in de database inserten/updaten
                     Location location = data.getLastLocation();
                     Connection connection = DataSource.getConnection();
-                    PreparedStatement stmt = connection.prepareStatement("REPLACE INTO playerdata (player_uuid, is_flying, location_x, location_y, location_z, world, gamemode, total_playtime) values(?, ?, ?, ?, ?, ?, ?, ?)");
+                    PreparedStatement statement = connection.prepareStatement("REPLACE INTO playerdata (player_uuid, is_flying, location_x, location_y, location_z, world, gamemode, total_playtime) values(?, ?, ?, ?, ?, ?, ?, ?)");
 
-                    stmt.setString(1, data.getPlayer().getUniqueId().toString());
-                    stmt.setBoolean(2, data.isFlying());
+                    statement.setString(1, data.getPlayer().getUniqueId().toString());
+                    statement.setBoolean(2, data.isFlying());
 
-                    stmt.setDouble(3, location.getX());
-                    stmt.setDouble(4, location.getY());
-                    stmt.setDouble(5, location.getZ());
+                    statement.setDouble(3, location.getX());
+                    statement.setDouble(4, location.getY());
+                    statement.setDouble(5, location.getZ());
 
-                    stmt.setString(6, location.getWorld().getName());
-                    stmt.setInt(7, data.getGameMode());
-                    stmt.setLong(8, data.getOnlineTime());
+                    statement.setString(6, location.getWorld().getName());
+                    statement.setInt(7, data.getGameMode());
+                    statement.setLong(8, data.getOnlineTime());
 
-                    stmt.execute();
-                    stmt.close();
+                    statement.execute();
+                    statement.close();
+                    connection.close();
 
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
@@ -80,6 +81,8 @@ public class SqlDataProvider implements DataProvider {
 
                 ResultSet result = preparedStatement.executeQuery();
                 preparedStatement.close();
+                connection.close();
+
                 // Alleen PlayerdataWrapper returnen als er wel degeleijk een resultaat beschikbaar is.
                 if (result.next()) {
                     return PlayerdataWrapper.fromResultset(result);

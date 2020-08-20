@@ -81,6 +81,8 @@ public class PlayerdataWrapper {
         int gamemode = resultSet.getInt("gamemode");
         int onlineTime = resultSet.getInt("total_playtime");
 
+        resultSet.close();
+
         return new PlayerdataWrapper(possiblePlayer, uuid, isFlying, location, gamemode, onlineTime);
     }
 
